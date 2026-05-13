@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+{% block title %}Ingrédients - Recettes Maison{% endblock %}
+
+{% block content %}
+<h3>Ingrédients</h3>
+<div class="list-group">
+  {% for ingredient in ingredients %}
+    <a href="{% url 'ingredient:detail' ingredient.slug %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+      {{ ingredient.name }}
+      <span class="badge bg-secondary rounded-pill">{{ ingredient.count }}</span>
+    </a>
+  {% empty %}
+    <p>Aucun ingrédient.</p>
+  {% endfor %}
+</div>
+{% endblock %}

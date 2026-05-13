@@ -1,0 +1,66 @@
+:root {
+    --primary-green: #71b36b;
+    --light-green: #edf7ea;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 0.25rem rgba(113, 179, 107, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+}
+
+.btn-primary:hover {
+    background-color: #5fa05a;
+    border-color: #5fa05a;
+}
+
+.badge {
+    padding: 0.5rem 0.75rem;
+}
+
+.rounded-circle {
+    object-fit: cover;
+}
+
+.sticky-top {
+    top: 70px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, var(--light-green) 0%, #f5f9f3 100%);
+    border: none;
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .card-img-top {
+        height: 180px;
+    }
+    
+    .sticky-top {
+        top: 60px;
+    }
+}

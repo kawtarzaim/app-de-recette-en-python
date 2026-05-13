@@ -1,0 +1,10 @@
+{% extends 'base/base.html' %}
+{% block title %}Accueil - Recettes Maison{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <h1 class="display-5">Bienvenue sur Recettes Maison</h1>
+    <p class="lead text-muted">Découvrez et partagez des recettes maison délicieuses.</p>
+    <a href="{% url 'recettes:home' %}" class="btn btn-success">Voir les recettes</a>
+</div>
+{% endblock %}

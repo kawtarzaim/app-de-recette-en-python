@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% block title %}Mes recettes - Recettes Maison{% endblock %}
+
+{% block content %}
+<h3>Mes recettes</h3>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-4">
+  {% for recipe in recipes %}
+    <div class="col">
+      <div class="card recipe-card h-100 shadow-sm border-0">
+        <div class="position-relative">
+          {% if recipe.image %}
+            <img src="{{ recipe.image.url }}" class="card-img-top rounded-top" alt="{{ recipe.title }}">
+          {% else %}
+            <div class="bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center" style="height:180px">
+              <i class="bi bi-image fs-2 text-muted"></i>
+            </div>
+          {% endif %}
+
+          {% if recipe.category %}
+            <span class="badge bg-success position-absolute top-2 start-2 text-white">{{ recipe.category.name }}</span>
+          {% endif %}
+        </div>
+
+        <div class="card-body pb-3">
+          <h5 class="card-title">{{ recipe.title }}</h5>
+          <div class="d-flex justify-content-between small text-muted mb-2">
+            <div><i class="bi bi-clock me-1"></i> {{ recipe.preparation_time }} min</div>
+            <div>{{ recipe.get_difficulty_display }}</div>
+          </div>
+
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+              <span class="fw-bold">{{ recipe.average_rating|default:0 }}</span>
+              <span class="text-muted">({{ recipe.ratings_count|default:0 }})</span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <a href="{% url 'recettes:detail' recipe.pk %}" class="btn btn-sm btn-outline-primary">Voir</a>
+            <a href="{% url 'recettes:edit' recipe.pk %}" class="btn btn-sm btn-outline-success">Modifier</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>Aucune recette. <a href="{% url 'recettes:create' %}">En créer une</a></p>
+  {% endfor %}
+</div>
+
+<div class="mt-4">
+  <nav aria-label="pagination">
+    <ul class="pagination">
+      {% if recipes.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ recipes.previous_page_number }}">Préc</a></li>
+      {% endif %}
+      {% for p in recipes.paginator.page_range %}
+        <li class="page-item {% if recipes.number == p %}active{% endif %}"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+      {% endfor %}
+      {% if recipes.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ recipes.next_page_number }}">Suiv</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endblock %}

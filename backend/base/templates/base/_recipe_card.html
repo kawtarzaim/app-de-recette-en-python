@@ -1,0 +1,41 @@
+<div class="card recipe-card h-100 shadow-sm border-0">
+  <div class="position-relative">
+    {% if recipe.image %}
+      <img src="{{ recipe.image.url }}" class="card-img-top rounded-top" alt="{{ recipe.title }}">
+    {% else %}
+      <div class="bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center" style="height:180px">
+        <i class="bi bi-image fs-2 text-muted"></i>
+      </div>
+    {% endif %}
+
+    {% if recipe.category %}
+  <span class="badge bg-success position-absolute top-2 start-2 text-white">{{ recipe.category.name }}</span>
+    {% endif %}
+
+  <a href="{% url 'recettes:favorite_toggle' recipe.id %}" class="position-absolute top-2 end-2 btn btn-sm btn-light rounded-circle shadow-sm">
+      <i class="bi bi-heart{% if recipe.is_favorite %}-fill text-danger{% endif %}"></i>
+    </a>
+  </div>
+
+  <div class="card-body pb-3">
+    <h5 class="card-title">{{ recipe.title }}</h5>
+    <div class="d-flex justify-content-between small text-muted mb-2">
+      <div><i class="bi bi-clock me-1"></i> {{ recipe.preparation_time }} min</div>
+      <div>{{ recipe.get_difficulty_display }}</div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between">
+      <div>
+  <span class="fw-bold">{{ recipe.average_rating|default:0 }}</span>
+  <span class="text-muted">({{ recipe.ratings_count|default:0 }})</span>
+      </div>
+      <div>
+        {% for tag in recipe.tags.all|slice:":3" %}
+          <span class="badge bg-light text-muted">{{ tag.name }}</span>
+        {% empty %}
+          <span class="text-muted small">Sans tags</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

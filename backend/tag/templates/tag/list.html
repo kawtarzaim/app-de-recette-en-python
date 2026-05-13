@@ -1,0 +1,13 @@
+{% extends 'base/base.html' %}
+{% block title %}Tags - Recettes Maison{% endblock %}
+
+{% block content %}
+<h3>Tags</h3>
+<div>
+  {% for tag in tags %}
+    <a href="{% url 'tag:detail' tag.slug %}" class="badge bg-light border text-muted me-1 mb-1">{{ tag.name }}</a>
+  {% empty %}
+    <p>Aucun tag.</p>
+  {% endfor %}
+</div>
+{% endblock %}

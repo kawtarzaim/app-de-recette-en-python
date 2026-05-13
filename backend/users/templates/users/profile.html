@@ -1,0 +1,137 @@
+{% extends 'base/base.html' %}
+{% block title %}Profil - {{ profile_user.username }} - Recettes Maison{% endblock %}
+
+{% block content %}
+<div class="row">
+  <!-- Sidebar Profile -->
+  <div class="col-md-4 mb-4">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        {% if profile.avatar %}
+          <img src="{{ profile.avatar.url }}" alt="{{ profile_user.username }}" class="rounded-circle mb-3" style="width:120px;height:120px;object-fit:cover;">
+        {% else %}
+          <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3" style="width:120px;height:120px;">
+            <i class="bi bi-person fs-1 text-white"></i>
+          </div>
+        {% endif %}
+        
+        <h4 class="card-title">{{ profile_user.get_full_name|default:profile_user.username }}</h4>
+        <p class="text-muted">@{{ profile_user.username }}</p>
+        
+        {% if profile.bio %}
+          <p class="card-text small">{{ profile.bio }}</p>
+        {% endif %}
+        
+        <p class="text-muted small">Membre depuis {{ profile_user.date_joined|date:'d M Y' }}</p>
+
+        {% if is_own_profile %}
+          <a href="{% url 'users:edit_profile' %}" class="btn btn-sm btn-primary w-100">
+            <i class="bi bi-pencil me-1"></i> Modifier le profil
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="card shadow-sm mt-3">
+      <div class="card-body">
+        <h6 class="card-title">Statistiques</h6>
+        <div class="row text-center">
+          <div class="col-6 border-end pb-2">
+            <p class="mb-0"><strong class="fs-5">{{ stats.recipes_count }}</strong></p>
+            <small class="text-muted">Recettes</small>
+          </div>
+          <div class="col-6 pb-2">
+            <p class="mb-0"><strong class="fs-5">{{ stats.favorites_count }}</strong></p>
+            <small class="text-muted">Favoris</small>
+          </div>
+          <div class="col-6 border-end pt-2">
+            <p class="mb-0"><strong class="fs-5">{{ stats.comments_count }}</strong></p>
+            <small class="text-muted">Commentaires</small>
+          </div>
+          <div class="col-6 pt-2">
+            <p class="mb-0"><strong class="fs-5">{{ stats.ratings_count }}</strong></p>
+            <small class="text-muted">Notes</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="col-md-8">
+    <!-- Recipes Section -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">
+          <i class="bi bi-chat-left-text me-2"></i> Recettes publiées ({{ stats.recipes_count }})
+        </h5>
+      </div>
+      <div class="card-body">
+        {% if my_recipes %}
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            {% for recipe in my_recipes %}
+              <div class="col">
+                <div class="card h-100 border-0 shadow-sm">
+                  {% if recipe.image %}
+                    <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}" style="height:150px;object-fit:cover;">
+                  {% else %}
+                    <div class="bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center" style="height:150px;">
+                      <i class="bi bi-image fs-2 text-muted"></i>
+                    </div>
+                  {% endif %}
+                  <div class="card-body p-2">
+                    <h6 class="card-title small">{{ recipe.title|truncatewords:5 }}</h6>
+                    <small class="text-muted d-block"><i class="bi bi-clock"></i> {{ recipe.preparation_time }}min</small>
+                    <a href="{% url 'recettes:detail' recipe.pk %}" class="btn btn-sm btn-outline-primary w-100 mt-2">Voir</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          {% if stats.recipes_count > 6 %}
+            <a href="{% url 'recettes:my_recipes' %}" class="btn btn-sm btn-outline-secondary w-100 mt-3">Voir toutes les recettes</a>
+          {% endif %}
+        {% else %}
+          <p class="text-muted text-center">Aucune recette publiée.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Favorites Section -->
+    <div class="card shadow-sm">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">
+          <i class="bi bi-heart me-2"></i> Recettes favorites ({{ stats.favorites_count }})
+        </h5>
+      </div>
+      <div class="card-body">
+        {% if favorites %}
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            {% for fav in favorites %}
+              <div class="col">
+                <div class="card h-100 border-0 shadow-sm">
+                  {% if fav.recipe.image %}
+                    <img src="{{ fav.recipe.image.url }}" class="card-img-top" alt="{{ fav.recipe.title }}" style="height:150px;object-fit:cover;">
+                  {% else %}
+                    <div class="bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center" style="height:150px;">
+                      <i class="bi bi-image fs-2 text-muted"></i>
+                    </div>
+                  {% endif %}
+                  <div class="card-body p-2">
+                    <h6 class="card-title small">{{ fav.recipe.title|truncatewords:5 }}</h6>
+                    <small class="text-muted d-block">par <strong>{{ fav.recipe.author.username }}</strong></small>
+                    <a href="{% url 'recettes:detail' fav.recipe.pk %}" class="btn btn-sm btn-outline-primary w-100 mt-2">Voir</a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted text-center">Aucune recette favorite.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

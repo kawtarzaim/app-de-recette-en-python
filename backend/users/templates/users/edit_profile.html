@@ -1,0 +1,135 @@
+{% extends 'base/base.html' %}
+{% block title %}Modifier le profil - Recettes Maison{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-light">
+        <h5 class="mb-0">
+          <i class="bi bi-pencil me-2"></i> Modifier mon profil
+        </h5>
+      </div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <!-- Avatar Preview -->
+          {% if form.instance.avatar %}
+            <div class="mb-3 text-center">
+              <img src="{{ form.instance.avatar.url }}" alt="Avatar" class="rounded-circle" style="width:100px;height:100px;object-fit:cover;">
+            </div>
+          {% endif %}
+
+          <!-- Avatar Field -->
+          <div class="mb-3">
+            <label for="{{ form.avatar.id_for_label }}" class="form-label">
+              <i class="bi bi-image me-1"></i> Photo de profil
+            </label>
+            <input type="file" class="form-control {% if form.avatar.errors %}is-invalid{% endif %}" 
+                   id="{{ form.avatar.id_for_label }}" name="{{ form.avatar.name }}" accept="image/*">
+            {% if form.avatar.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.avatar.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+            <small class="text-muted d-block">Format: JPG, PNG (max 5MB)</small>
+          </div>
+
+          <!-- Bio Field -->
+          <div class="mb-3">
+            <label for="{{ form.bio.id_for_label }}" class="form-label">
+              <i class="bi bi-chat-left-text me-1"></i> Biographie
+            </label>
+            <textarea class="form-control {% if form.bio.errors %}is-invalid{% endif %}" 
+                      id="{{ form.bio.id_for_label }}" name="{{ form.bio.name }}" rows="3" 
+                      placeholder="Parlez-nous un peu de vous..." maxlength="500">{{ form.instance.bio }}</textarea>
+            {% if form.bio.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.bio.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+            <small class="text-muted d-block">Max 500 caractères</small>
+          </div>
+
+          <!-- Email Field -->
+          <div class="mb-3">
+            <label for="{{ form.email.id_for_label }}" class="form-label">
+              <i class="bi bi-envelope me-1"></i> Email
+            </label>
+            <input type="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" 
+                   id="{{ form.email.id_for_label }}" name="{{ form.email.name }}" 
+                   value="{{ form.instance.user.email }}" placeholder="votre@email.com">
+            {% if form.email.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.email.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- First Name Field -->
+          <div class="mb-3">
+            <label for="{{ form.first_name.id_for_label }}" class="form-label">
+              <i class="bi bi-person me-1"></i> Prénom
+            </label>
+            <input type="text" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" 
+                   id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.name }}" 
+                   value="{{ form.instance.user.first_name }}" placeholder="Votre prénom">
+            {% if form.first_name.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.first_name.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Last Name Field -->
+          <div class="mb-3">
+            <label for="{{ form.last_name.id_for_label }}" class="form-label">
+              <i class="bi bi-person me-1"></i> Nom
+            </label>
+            <input type="text" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" 
+                   id="{{ form.last_name.id_for_label }}" name="{{ form.last_name.name }}" 
+                   value="{{ form.instance.user.last_name }}" placeholder="Votre nom">
+            {% if form.last_name.errors %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.last_name.errors %}
+                  {{ error }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Form Errors -->
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Erreur:</strong>
+              {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+              {% endfor %}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endif %}
+
+          <!-- Buttons -->
+          <div class="d-grid gap-2 d-sm-flex gap-2">
+            <button type="submit" class="btn btn-primary flex-sm-fill">
+              <i class="bi bi-check-circle me-1"></i> Enregistrer les modifications
+            </button>
+            <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary flex-sm-fill">
+              <i class="bi bi-x-circle me-1"></i> Annuler
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
